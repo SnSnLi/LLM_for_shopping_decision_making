@@ -19,8 +19,8 @@ def dataset_jsonl_transfer(origin_path, new_path):
         if isinstance(data, list):  # 如果是JSON数组
             for item in data:
                 message = {
-                    "instruction": "作为一个购物决策助手，请根据商品的基本信息生成详细的购物建议报告。",
-                    "input": f"商品信息：\n- 商品名称：{item['input']['product_name']}\n- 评价数量：{item['input']['review_count']}\n- 平均评分：{item['input']['average_rating']}",
+                    "instruction": "As a shopping decision assistant, please generate a detailed shopping recommendation report based on the basic information of the product.",
+                    "input": f"Product Information: \n- Product Name: {item['input']['product_name']}\n- Evaluation quantity：{item['input']['review_count']}\n- Average rating：{item['input']['average_rating']}",
                     "output": item['output']
                 }
                 messages.append(message)
@@ -37,7 +37,7 @@ def process_func(example):
     MAX_LENGTH = 2048  # 增加长度以适应详细的购物建议报告
     input_ids, attention_mask, labels = [], [], []
     instruction = tokenizer(
-        f"<|system|>\n作为一个购物决策助手，请根据商品的基本信息（包括商品名称、评价数量和平均评分），生成一份详细的购物建议报告。报告应该包含基本信息分析、预算考虑、需求评估和偏好分析等方面。<|endoftext|>\n<|user|>\n{example['input']}<|endoftext|>\n<|assistant|>\n",
+        f"<|system|>\nAs a shopping decision assistant, generate a detailed shopping recommendation report based on the basic information of the item, including the item name, number of reviews, and average rating. The report should include basic information analysis, budget considerations, needs assessment and preference analysis. <|endoftext|>\n<|user|>\n{example['input']}<|endoftext|>\n<|assistant|>\n",
         add_special_tokens=False,
     )
     response = tokenizer(f"{example['output']}", add_special_tokens=False)
